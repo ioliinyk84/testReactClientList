@@ -49,7 +49,9 @@ const ClientList = React.createClass({
            return note.general.firstName.search(myReg) !== -1 ||
             note.general.lastName.search(myReg) !== -1}
         );
-        this.setState({notes: filteredNotes}) 
+        this.props.onPassDataset(filteredNotes); 
+        this.setState({notes: filteredNotes});
+        
     },
     stopDefAction(){
         event.preventDefault();
@@ -71,7 +73,7 @@ const ClientList = React.createClass({
                     {
                         this.state.notes.map((note, index) =>
                             <ClientNote
-                                key={index}
+                                key={Date.now() + Math.random()}
                                 avatar={note.general.avatar}
                                 firstName={note.general.firstName}
                                 lastName={note.general.lastName}
@@ -95,9 +97,10 @@ const DetailInfo = React.createClass({
     },
     componentDidUpdate(nextProps) {
         return this.props !== nextProps &&
-            this.setState({ note: this.props.startInfo[this.props.idNumber] })
+            this.setState({ note: this.props.notess[this.props.idNumber] })
     },
     render() {
+        
         const {
             note
         } = this.state;
@@ -145,13 +148,17 @@ const ListApp = React.createClass({
     handlePass: function (num) {
         this.setState({ idNumber: num });
     },
+     passDataset: function (filteredNotes) {
+        this.setState({ notess: filteredNotes });
+    }, 
     render() {
+        
         return (
             <div>
                 <h1>CLIENT LIST</h1>
-                <ClientList notes={this.state.notes} onPassData={this.handlePass} />
+                <ClientList notes={this.state.notes} onPassData={this.handlePass} onPassDataset={this.passDataset} />
 
-                <DetailInfo startInfo={this.state.notes} idNumber={this.state.idNumber} />
+                <DetailInfo startInfo={this.state.notes} notess={this.state.notess} idNumber={this.state.idNumber} />
             </div>
         );
     }
