@@ -8,11 +8,11 @@ const ClientNote = React.createClass({
             id
         } = this.props;
         return (
-            <div className="active"  id={id}>
+            <div className="active" id={id}>
                 <img src={avatar} />
                 <div>
-                    <p >{firstName}</p>
-                    <p>{lastName}</p>
+                    {firstName + "  "}
+                    {lastName}
                 </div>
             </div>
         )
@@ -20,52 +20,84 @@ const ClientNote = React.createClass({
 });
 
 const ClientList = React.createClass({
-    
+    getInitialState() {
+        return {
+          myValue: '',
+          notes: this.props.notes 
+        };
+      },
     handleClick(event) {
         document.querySelectorAll('.active').forEach((div) => div.className = "");
+
         if (event.target.classList.contains('active')) return;
         event.target.parentNode.classList.add('active');
-        let AAA = document.querySelector('.active').getAttribute('id');
-        this.props.onSelectLanguage(AAA);
-    },
 
+        let num = document.querySelector('.active').getAttribute('id');
+        this.props.onPassData(num);
+    },
+    onChangeHandler(event) {
+        this.setState({myValue: event.target.value})
+      },
+    
+    valueInput(){
+        const searchField = this.state.myValue;
+       
+        const myReg = new RegExp(searchField, "i");
+
+        const filteredNotes = this.props.notes.filter((note) => 
+        {
+           return note.general.firstName.search(myReg) !== -1 ||
+            note.general.lastName.search(myReg) !== -1}
+        );
+        this.setState({notes: filteredNotes}) 
+    },
+    stopDefAction(){
+        event.preventDefault();
+    },
     render() {
         return (
-            <div onClick={this.handleClick}>
-                {
-                    this.props.notes.map((note, index) =>
-                        <ClientNote
-                            key={index}
-                            avatar={note.general.avatar}
-                            firstName={note.general.firstName}
-                            lastName={note.general.lastName}
-                            id={index}
-                        />
+            <div>
+                <form id="form" onSubmit={this.stopDefAction}>
+                <input type="text" 
+                placeholder="ПОИСК ПО БАЗЕ" 
+                id="item-name" 
+                value={this.state.myValue} 
+                onChange={this.onChangeHandler}/>
+                </form>
 
-                    )
-                }
+                <button onClick={this.valueInput}>Искать </button>
+
+                <div onClick={this.handleClick} id="description">
+                    {
+                        this.state.notes.map((note, index) =>
+                            <ClientNote
+                                key={index}
+                                avatar={note.general.avatar}
+                                firstName={note.general.firstName}
+                                lastName={note.general.lastName}
+                                id={index}
+                            />
+
+                        )
+                    }
+                </div>
             </div>
         );
     }
 });
 
-const ClientSearch = React.createClass({
-    render() {
-    }
-});
 
 const DetailInfo = React.createClass({
-      getInitialState() {
+    getInitialState() {
         return {
             note: this.props.startInfo[this.props.idNumber]
         };
     },
-    componentDidUpdate(nextProps){   
-       return this.props !== nextProps && 
-       this.setState({ note: this.props.startInfo[this.props.idNumber]}) 
-    }, 
+    componentDidUpdate(nextProps) {
+        return this.props !== nextProps &&
+            this.setState({ note: this.props.startInfo[this.props.idNumber] })
+    },
     render() {
-        console.log(this.props.idNumber)
         const {
             note
         } = this.state;
@@ -82,45 +114,44 @@ const DetailInfo = React.createClass({
 });
 
 const ListApp = React.createClass({
-    /* запрос из файла */
+
     getInitialState() {
         return {
-            notes: [{
-                general: {
-                    id: 1,
-                    firstName: "Liana",
-                    lastName: "Crooks",
-                    avatar: "https://s3.amazonaws.com/uifaces/faces/twitter/kevinoh/128.jpg"
-                }
-            },
-            {
-                "general": {
-                    "firstName": "Deontae",
-                    "lastName": "Dare",
-                    "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/andysolomon/128.jpg"
-                }
-            },
-            {
-                "general": {
-                    "firstName": "Cortez",
-                    "lastName": "Pacocha",
-                    "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/holdenweb/128.jpg"
-                }
-            }],
+            notes: [
+                {
+                    "general": {
+                        "firstName": "Liana",
+                        "lastName": "Crooks",
+                        "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/kevinoh/128.jpg"
+                    },
+                },
+                {
+                    "general": {
+                        "firstName": "Deontae",
+                        "lastName": "Dare",
+                        "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/andysolomon/128.jpg"
+                    },
+                },
+                {
+                    "general": {
+                        "firstName": "Cortez",
+                        "lastName": "Pacocha",
+                        "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/holdenweb/128.jpg"
+                    },
+                }],
             idNumber: 0
         };
     },
-    handleLanguage: function(AAA) {
-        this.setState({idNumber: AAA});
+    handlePass: function (num) {
+        this.setState({ idNumber: num });
     },
     render() {
-       console.log(this.state.idNumber)
         return (
             <div>
                 <h1>CLIENT LIST</h1>
-                <ClientList notes={this.state.notes} onSelectLanguage={this.handleLanguage}/>
+                <ClientList notes={this.state.notes} onPassData={this.handlePass} />
 
-                <DetailInfo startInfo={this.state.notes} idNumber={this.state.idNumber}/>
+                <DetailInfo startInfo={this.state.notes} idNumber={this.state.idNumber} />
             </div>
         );
     }
