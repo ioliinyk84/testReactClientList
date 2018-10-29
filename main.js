@@ -1,4 +1,3 @@
-
 const ClientNote = React.createClass({
     render() {
         const {
@@ -142,7 +141,29 @@ const ListApp = React.createClass({
                         "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/holdenweb/128.jpg"
                     },
                 }],
-            idNumber: 0
+            idNumber: 0,
+            notess:  [
+                {
+                    "general": {
+                        "firstName": "Liana",
+                        "lastName": "Crooks",
+                        "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/kevinoh/128.jpg"
+                    },
+                },
+                {
+                    "general": {
+                        "firstName": "Deontae",
+                        "lastName": "Dare",
+                        "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/andysolomon/128.jpg"
+                    },
+                },
+                {
+                    "general": {
+                        "firstName": "Cortez",
+                        "lastName": "Pacocha",
+                        "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/holdenweb/128.jpg"
+                    },
+                }],
         };
     },
     handlePass: function (num) {
