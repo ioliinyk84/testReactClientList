@@ -8,10 +8,12 @@ const ClientNote = React.createClass({
         } = this.props;
         return (
             <div className="active" id={id}>
-                <img src={avatar} />
-                <div>
-                    {firstName + "  "}
-                    {lastName}
+                <div className="wrappDescNote">
+                    <img src={avatar} className="avatarSideBar" />
+                    <div className="firstNamePerson">
+                        {firstName + "  "}
+                        {lastName}
+                    </div>
                 </div>
             </div>
         )
@@ -21,51 +23,52 @@ const ClientNote = React.createClass({
 const ClientList = React.createClass({
     getInitialState() {
         return {
-          myValue: '',
-          notes: this.props.notes 
+            myValue: '',
+            notes: this.props.notes
         };
-      },
+    },
     handleClick(event) {
         document.querySelectorAll('.active').forEach((div) => div.className = "");
 
         if (event.target.classList.contains('active')) return;
-        event.target.parentNode.classList.add('active');
+        event.target.parentNode.parentNode.classList.add('active');
 
         let num = document.querySelector('.active').getAttribute('id');
         this.props.onPassData(num);
     },
     onChangeHandler(event) {
-        this.setState({myValue: event.target.value})
-      },
-    
-    valueInput(){
+        this.setState({ myValue: event.target.value })
+    },
+
+    valueInput() {
         const searchField = this.state.myValue;
-       
+
         const myReg = new RegExp(searchField, "i");
 
-        const filteredNotes = this.props.notes.filter((note) => 
-        {
-           return note.general.firstName.search(myReg) !== -1 ||
-            note.general.lastName.search(myReg) !== -1}
+        const filteredNotes = this.props.notes.filter((note) => {
+            return note.general.firstName.search(myReg) !== -1 ||
+                note.general.lastName.search(myReg) !== -1
+        }
         );
-        this.props.onPassDataset(filteredNotes); 
-        this.setState({notes: filteredNotes});
-        
+        this.props.onPassDataset(filteredNotes);
+        this.setState({ notes: filteredNotes });
+
     },
-    stopDefAction(){
+    stopDefAction() {
         event.preventDefault();
     },
     render() {
         return (
             <div>
-                <form id="form" onSubmit={this.stopDefAction}>
-                <input type="text" 
-                placeholder="ПОИСК ПО БАЗЕ" 
-                id="item-name" 
-                value={this.state.myValue} 
-                onChange={this.onChangeHandler}/>
-                </form>
-
+                <div className="search">
+                    <form id="form" onSubmit={this.stopDefAction}>
+                        <input type="text"
+                            placeholder="ПОИСК ПО БАЗЕ"
+                            id="item-name"
+                            value={this.state.myValue}
+                            onChange={this.onChangeHandler} />
+                    </form>
+                </div>
                 <button onClick={this.valueInput}>Искать </button>
 
                 <div onClick={this.handleClick} id="description">
@@ -99,16 +102,17 @@ const DetailInfo = React.createClass({
             this.setState({ note: this.props.notess[this.props.idNumber] })
     },
     render() {
-        
+
         const {
             note
         } = this.state;
         return (
-            <div >
-                <img src={note.general.avatar} />
-                <div>
-                    <p>{note.general.firstName}</p>
-                    <p>{note.general.lastName}</p>
+            <div className="fullInfowrap">
+                <img src={note.general.avatar} className="avatarfullInfo"/>
+                <div className="wrapfullInfotext">
+                    <h1>{note.general.firstName + "  "}
+                     {note.general.lastName}</h1>
+                   
                 </div>
             </div>
         )
@@ -142,7 +146,7 @@ const ListApp = React.createClass({
                     },
                 }],
             idNumber: 0,
-            notess:  [
+            notess: [
                 {
                     "general": {
                         "firstName": "Liana",
@@ -169,17 +173,20 @@ const ListApp = React.createClass({
     handlePass: function (num) {
         this.setState({ idNumber: num });
     },
-     passDataset: function (filteredNotes) {
+    passDataset: function (filteredNotes) {
         this.setState({ notess: filteredNotes });
-    }, 
+    },
     render() {
-        
-        return (
-            <div>
-                <h1>CLIENT LIST</h1>
-                <ClientList notes={this.state.notes} onPassData={this.handlePass} onPassDataset={this.passDataset} />
 
-                <DetailInfo startInfo={this.state.notes} notess={this.state.notess} idNumber={this.state.idNumber} />
+        return (
+            <div className="wrapp">
+
+                <div className="sidebar">
+                    <ClientList notes={this.state.notes} onPassData={this.handlePass} onPassDataset={this.passDataset} />
+                </div>
+                <div className="maintext">
+                    <DetailInfo startInfo={this.state.notes} notess={this.state.notess} idNumber={this.state.idNumber} />
+                </div>
             </div>
         );
     }

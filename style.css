@@ -1,0 +1,54 @@
+.wrapp {
+    display: flex;
+    width: 80%;
+    margin: 0 auto;
+    
+}
+.sidebar {
+ flex-grow: 0; 
+
+border: 1px solid black;
+}
+.maintext {
+     flex-grow: 1; 
+
+   border: 1px solid black;
+}
+#item-name {
+    min-height: 20px;
+    width:95%;
+    margin: 2%;
+}
+.wrappDescNote {
+    display: flex;
+    align-items: start; 
+   
+    border: 1px solid black;
+}
+.wrappDescNote:hover {
+    background-color: rgba(52, 201, 72, 0.5);
+}
+.avatarSideBar {
+    max-width: 40%;
+    padding: 2%;
+    border: 1px solid black;
+}
+.wrapfullInfotext {
+    padding-top: 5%;
+    padding-bottom: 5%;
+}
+.fullInfowrap {
+    display: flex;
+    align-items: start;
+}
+
+.avatarfullInfo {
+    width: 300px;
+    padding: 5%;
+}
+.firstNamePerson {
+    align-self: stretch;
+    flex-grow: 1;
+    font-size: 120%;
+    padding: 5%;
+}
